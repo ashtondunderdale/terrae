@@ -9,7 +9,7 @@ class TerraeButton extends StatefulWidget {
   });
 
   final String text;
-  final Icon icon;
+  final IconData icon;
   final VoidCallback onTap;
 
   @override
@@ -17,35 +17,63 @@ class TerraeButton extends StatefulWidget {
 }
 
 class _TerraeButtonState extends State<TerraeButton> {
-  bool hovered = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  bool _hovered = false;
+  bool _tapDown = false;
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => setState(() => hovered = true),
-      onExit: (_) => setState(() => hovered = false),
-
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: hovered ? 50 : 150),
-        curve: Curves.easeIn,
-        decoration: BoxDecoration(
-          color: hovered ? const Color.fromARGB(255, 223, 223, 223) : const Color.fromARGB(255, 241, 241, 241),
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: InkWell(
-          onTap: widget.onTap,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        onTapDown: (_) {
+          setState(() {
+            _tapDown = true;
+          });
+        },
+        onTapUp: (_) {
+          setState(() {
+            _tapDown = false;
+          });
+        },
+        onTapCancel: () {
+          setState(() {
+            _tapDown = false;
+          });
+        },
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 50),
+          curve: Curves.easeInOut,
+          decoration: BoxDecoration(
+            color: _tapDown
+                ? const Color.fromARGB(255, 207, 207, 207)
+                : _hovered
+                    ? const Color.fromARGB(255, 223, 223, 223)
+                    : const Color.fromARGB(255, 241, 241, 241),
+            borderRadius: BorderRadius.circular(4),
+          ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(widget.text),
-                widget.icon,
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Icon(
+                    widget.icon,
+                    color: const Color.fromARGB(255, 82, 82, 82),
+                    size: 18,
+                  ),
+                ),
+                Text(
+                  widget.text,
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 107, 107, 107),
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ),

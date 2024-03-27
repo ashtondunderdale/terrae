@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:terrae/quiz/api.dart';
 import 'package:terrae/quiz/common/terrae_button.dart';
+import 'package:terrae/quiz/common/terrae_dropdown.dart';
 import 'package:terrae/quiz/country.dart';
 
 class Quiz extends StatefulWidget {
@@ -28,17 +29,24 @@ class _QuizState extends State<Quiz> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
             child: TerraeButton(
-              text: "play", 
-              icon: Icon(Icons.abc), 
+              text: "PLAY", 
+              icon: Icons.play_arrow, 
               onTap: () {
-            
+                
               },
             ),
           ),
+          TerraeDropdown(
+            items: const ["Random", "Timed", "Practice"], 
+            onSelected: (item) {
+              
+            }
+          )
         ],
       ),
     );
