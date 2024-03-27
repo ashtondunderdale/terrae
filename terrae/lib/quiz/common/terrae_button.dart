@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TerraeButton extends StatefulWidget {
-  const TerraeButton({
-    Key? key,
+  const TerraeButton({super.key, 
     required this.text,
-    required this.icon,
+    required this.icon, 
     required this.onTap,
   });
 
   final String text;
-  final IconData icon;
+  final IconData? icon; 
   final VoidCallback onTap;
 
   @override
@@ -58,14 +57,15 @@ class _TerraeButtonState extends State<TerraeButton> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Icon(
-                    widget.icon,
-                    color: const Color.fromARGB(255, 82, 82, 82),
-                    size: 18,
+                if (widget.icon != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(
+                      widget.icon,
+                      color: const Color.fromARGB(255, 82, 82, 82),
+                      size: 18,
+                    ),
                   ),
-                ),
                 Text(
                   widget.text,
                   style: const TextStyle(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:terrae/quiz/play_quiz.dart';
 import 'package:terrae/quiz/quiz.dart';
 
 void main() {
@@ -13,7 +14,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Quiz(),
+      home: PlayQuiz(gameMode: ""),
     );
   }
 }

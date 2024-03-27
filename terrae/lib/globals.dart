@@ -8,3 +8,9 @@ TextStyle defaultPlainText = TextStyle(
   fontSize: 12,
   fontWeight: FontWeight.bold
 );
+
+TextStyle defaultTitleText = TextStyle(
+  color: defaultGrey,
+  fontSize: 48,
+  fontWeight: FontWeight.bold
+);
