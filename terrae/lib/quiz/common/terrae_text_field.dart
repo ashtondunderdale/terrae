@@ -16,6 +16,18 @@ class _TerraeTextFieldState extends State<TerraeTextField> {
   late FocusNode _focusNode;
 
   @override
+    void initState() {
+      super.initState();
+      _focusNode = FocusNode();
+    }
+
+    @override
+    void dispose() {
+      _focusNode.dispose();
+      super.dispose();
+    }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: 320,
@@ -36,8 +48,12 @@ class _TerraeTextFieldState extends State<TerraeTextField> {
           height: 32,
           child: TextField(
             controller: widget.controller,
+            focusNode: _focusNode,
             textAlignVertical: TextAlignVertical.center,
-            onSubmitted: (_) => widget.onSubmitted(),
+            onSubmitted: (_) {
+              widget.onSubmitted();
+              _focusNode.requestFocus();
+            },
             decoration: InputDecoration(
               hintText: widget.hintText,
               border: InputBorder.none,
