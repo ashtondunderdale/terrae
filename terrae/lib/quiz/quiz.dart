@@ -41,11 +41,14 @@ class _QuizState extends State<Quiz> {
               },
             ),
           ),
-          TerraeDropdown(
-            items: const ["Random", "Timed", "Practice"], 
-            onSelected: (item) {
-              
-            }
+          Padding(
+            padding: const EdgeInsets.only(left: 24),
+            child: TerraeDropdown(
+              items: const ["RANDOM", "TIMED", "PRACTICE"], 
+              onSelected: (item) {
+                
+              }
+            ),
           )
         ],
       ),

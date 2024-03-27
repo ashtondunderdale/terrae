@@ -69,7 +69,7 @@ class _TerraeButtonState extends State<TerraeButton> {
                 Text(
                   widget.text,
                   style: const TextStyle(
-                    color: Color.fromARGB(255, 107, 107, 107),
+                    color: Color.fromARGB(255, 82, 82, 82),
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
