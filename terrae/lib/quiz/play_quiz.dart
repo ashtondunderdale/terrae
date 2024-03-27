@@ -25,6 +25,8 @@ class _PlayQuizState extends State<PlayQuiz> {
   IconData answerIcon = Icons.question_mark;
   String answerMessage = "";
 
+  List<String> incorrectCountries = [];
+
   final TextEditingController capitalController = TextEditingController();
 
   @override
@@ -61,7 +63,7 @@ class _PlayQuizState extends State<PlayQuiz> {
           ),
           width: 600,
           height: 700,
-          child: _buildQuestion(context, _countries, _countryIndex, capitalController, answerIcon, answerMessage, (answer) {
+          child: _buildQuestion(context, _countries, _countryIndex, capitalController, answerIcon, answerMessage, incorrectCountries, (answer) {
             setState(() {
               if (_countries[_countryIndex].capitals.any((c) => c.toString().toLowerCase() == answer.toLowerCase())) {
                 answerIcon = Icons.check;
@@ -69,9 +71,15 @@ class _PlayQuizState extends State<PlayQuiz> {
               } else {
                 answerIcon = Icons.close;
                 answerMessage = "The capital of ${_countries[_countryIndex].name} is ${_countries[_countryIndex].capitals.first}";
+                incorrectCountries.add(_countries[_countryIndex].name);
               }
 
-              _countryIndex++;
+              if (_countryIndex + 1 != _countries.length) {
+                _countryIndex++;
+              } else {
+                
+              }
+
               capitalController.text = "";
             });
           }),
@@ -87,8 +95,12 @@ Widget _buildQuestion(
   TextEditingController controller,
   IconData answerIcon,
   String answerMessage,
+  List<String> incorrectCountries,
   Function(String) onNextCountry, 
-  ) {
+  ) {  
+    
+  final ScrollController _scrollController = ScrollController();
+
   return Padding(
     padding: const EdgeInsets.all(16),
     child: Column(
@@ -109,6 +121,7 @@ Widget _buildQuestion(
                   controller: controller,
                   onSubmitted: () {
                     onNextCountry(controller.text);
+                    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
                   },
                 ),
                 Padding(
@@ -130,6 +143,24 @@ Widget _buildQuestion(
                   ? Colors.green : answerIcon == Icons.close 
                   ? Colors.red : Colors.grey,)),
             ),
+            const SizedBox(height: 32),
+            SizedBox(
+              height: 200,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                controller: _scrollController,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (var item in incorrectCountries)
+                      Text(item, style: defaultPlainTextLight.copyWith(
+                        color: answerIcon == Icons.check 
+                          ? Colors.green : answerIcon == Icons.close 
+                          ? Colors.red : Colors.grey,)),         
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
         const Spacer(),
@@ -147,6 +178,7 @@ Widget _buildQuestion(
             TerraeButton(
               onTap: () {
                 onNextCountry(controller.text);
+                _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
               }, 
               text: "next",
               icon: null,
