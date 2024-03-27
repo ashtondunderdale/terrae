@@ -7,7 +7,7 @@ class TerraeButton extends StatefulWidget {
     required this.onTap,
   });
 
-  final String text;
+  final String? text;
   final IconData? icon; 
   final VoidCallback onTap;
 
@@ -66,14 +66,15 @@ class _TerraeButtonState extends State<TerraeButton> {
                       size: 18,
                     ),
                   ),
-                Text(
-                  widget.text,
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 82, 82, 82),
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+                if (widget.text != null)
+                  Text(
+                    widget.text!,
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 82, 82, 82),
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

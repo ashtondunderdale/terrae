@@ -26,7 +26,7 @@ class _TerraeDropdownState extends State<TerraeDropdown> {
       child: DropdownButton<String>(
         hint: Padding(
           padding: const EdgeInsets.all(8),
-          child: Text("GAME MODE", style: defaultPlainText),
+          child: Text("GAME MODE", style: defaultPlainTextDark),
         ),
         underline: const SizedBox() ,
         dropdownColor: Colors.white,
@@ -36,7 +36,7 @@ class _TerraeDropdownState extends State<TerraeDropdown> {
             value: item,
             child: Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
-              child: Text(item, style: defaultPlainText),
+              child: Text(item, style: defaultPlainTextDark),
             ),
           );
         }).toList(),
