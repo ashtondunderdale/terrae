@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:terrae/globals.dart';
 import 'package:terrae/quiz/common/terrae_button.dart';
+import 'package:terrae/quiz/common/terrae_dialog.dart';
 import 'package:terrae/quiz/common/terrae_text_field.dart';
 
 import 'api.dart';
@@ -25,14 +28,19 @@ class _PlayQuizState extends State<PlayQuiz> {
   IconData answerIcon = Icons.question_mark;
   String answerMessage = "";
 
-  List<String> incorrectCountries = [];
+  Map<String, bool> answeredCountries = {};
+  int correctAnswers = 0;
 
   final TextEditingController capitalController = TextEditingController();
+
+  late Timer _timer;
+  int _secondsPassed = 0;
 
   @override
   void initState() {
     super.initState();
     fetchCountries();
+    _startTimer();
   }
 
   void fetchCountries() async {
@@ -40,6 +48,20 @@ class _PlayQuizState extends State<PlayQuiz> {
     setState(() {
       _dataLoaded = true;
     });
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _secondsPassed++;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -63,42 +85,59 @@ class _PlayQuizState extends State<PlayQuiz> {
           ),
           width: 600,
           height: 700,
-          child: _buildQuestion(context, _countries, _countryIndex, capitalController, answerIcon, answerMessage, incorrectCountries, (answer) {
-            setState(() {
-              if (_countries[_countryIndex].capitals.any((c) => c.toString().toLowerCase() == answer.toLowerCase())) {
-                answerIcon = Icons.check;
-                answerMessage = "";
-              } else {
-                answerIcon = Icons.close;
-                answerMessage = "The capital of ${_countries[_countryIndex].name} is ${_countries[_countryIndex].capitals.first}";
-                incorrectCountries.add(_countries[_countryIndex].name);
-              }
+          child: Column(
+            children: [
+              Expanded(
+                child: _buildQuestion(context, _countries, _countryIndex, capitalController, answerIcon, answerMessage, answeredCountries, _secondsPassed, (answer) {
+                  bool correct = _countries[_countryIndex].capitals.any((c) => c.toString().toLowerCase() == answer.toLowerCase());
 
-              if (_countryIndex + 1 != _countries.length) {
-                _countryIndex++;
-              } else {
-                
-              }
+                  setState(() {
+                    if (correct) {
+                      answerIcon = Icons.check;
+                      answerMessage = "";
+                      correctAnswers++;
+                    } else {
+                      answerIcon = Icons.close;
+                      answerMessage = "The capital of ${_countries[_countryIndex].name} is ${_countries[_countryIndex].capitals.first}";
+                    }
 
-              capitalController.text = "";
-            });
-          }),
+                    answeredCountries.addAll({_countries[_countryIndex].name: correct});
+
+                    if (_countryIndex + 1 != _countries.length) {
+                      _countryIndex++;
+                    } else {
+                      _timer.cancel();
+                      
+                      showDialog(
+                        context: context, 
+                        builder: (BuildContext context) {
+                          return TerraeDialog(correctAnswers: correctAnswers, secondsPassed: _secondsPassed);
+                        },
+                      );
+                    }
+                    capitalController.text = "";
+                  });
+                }),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
 Widget _buildQuestion(
-  BuildContext context, 
-  List<Country> countries, 
-  int countryIndex, 
+  BuildContext context,
+  List<Country> countries,
+  int countryIndex,
   TextEditingController controller,
   IconData answerIcon,
   String answerMessage,
-  List<String> incorrectCountries,
-  Function(String) onNextCountry, 
-  ) {  
-    
+  Map<String, bool> answeredCountries,
+  int secondsPassed,
+  Function(String) onNextCountry,
+) {
   final ScrollController _scrollController = ScrollController();
 
   return Padding(
@@ -106,7 +145,19 @@ Widget _buildQuestion(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("${countryIndex + 1} / ${countries.length.toString()}", style: defaultPlainTextDark),
+        Row(
+          children: [
+            Text("${countryIndex + 1} / ${countries.length.toString()}", style: defaultPlainTextDark),
+            const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(right: 4),
+                child: Text(
+                  "${secondsPassed ~/ 60}:${(secondsPassed % 60).toString().padLeft(2, '0')}",
+                  style: defaultPlainTextDark,
+                ),
+              ),
+          ],
+        ),
         const SizedBox(height: 24),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,9 +179,11 @@ Widget _buildQuestion(
                   padding: const EdgeInsets.only(left: 8),
                   child: Icon(
                     answerIcon,
-                    color: answerIcon == Icons.check 
-                      ? Colors.green : answerIcon == Icons.close 
-                      ? Colors.red : Colors.grey,
+                    color: answerIcon == Icons.check
+                        ? Colors.green
+                        : answerIcon == Icons.close
+                            ? Colors.red
+                            : Colors.grey,
                     size: 18,
                   ),
                 ),
@@ -152,11 +205,11 @@ Widget _buildQuestion(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    for (var item in incorrectCountries)
+                    for (var item in answeredCountries.keys)
                       Text(item, style: defaultPlainTextLight.copyWith(
-                        color: answerIcon == Icons.check 
-                          ? Colors.green : answerIcon == Icons.close 
-                          ? Colors.red : Colors.grey,)),         
+                        color: answeredCountries[item] == true
+                          ? Colors.green : answeredCountries.containsKey(item)
+                          ? Colors.red : Colors.grey)),         
                   ],
                 ),
               ),
