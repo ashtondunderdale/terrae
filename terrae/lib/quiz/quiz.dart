@@ -3,6 +3,7 @@ import 'package:terrae/quiz/api.dart';
 import 'package:terrae/quiz/common/terrae_button.dart';
 import 'package:terrae/quiz/common/terrae_dropdown.dart';
 import 'package:terrae/quiz/country.dart';
+import 'package:terrae/quiz/play_quiz.dart';
 
 class Quiz extends StatefulWidget {
   Quiz({super.key});
@@ -14,17 +15,8 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  final QuizApi _api = QuizApi();
-
-  @override
-  void initState() {
-    super.initState();
-
-    fetchCountries();
-  }
-
-  void fetchCountries() async => widget.countries = await _api.getCountries();
-
+  String gameMode = "";
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +29,7 @@ class _QuizState extends State<Quiz> {
               text: "PLAY", 
               icon: Icons.play_arrow, 
               onTap: () {
-                
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayQuiz(gameMode: gameMode)));
               },
             ),
           ),
@@ -46,7 +38,7 @@ class _QuizState extends State<Quiz> {
             child: TerraeDropdown(
               items: const ["RANDOM", "TIMED", "PRACTICE"], 
               onSelected: (item) {
-                
+                gameMode = item;
               }
             ),
           )

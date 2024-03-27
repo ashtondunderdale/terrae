@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:terrae/quiz/country.dart';
 
-class QuizApi {
+class CountryApi {
 
   Future<List<Country>> getCountries() async {
     try {
