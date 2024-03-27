@@ -58,7 +58,7 @@ class _TerraeTextFieldState extends State<TerraeTextField> {
               hintText: widget.hintText,
               border: InputBorder.none,
               contentPadding: const EdgeInsets.only(bottom: 32 / 2, left: 8),              
-              hintStyle: defaultPlainTextDark,
+              hintStyle: defaultPlainTextLight,
             ),
           ),
         ),

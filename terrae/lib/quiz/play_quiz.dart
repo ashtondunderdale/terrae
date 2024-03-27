@@ -23,7 +23,7 @@ class _PlayQuizState extends State<PlayQuiz> {
   int _countryIndex = 0;
 
   IconData answerIcon = Icons.question_mark;
-
+  String answerMessage = "";
 
   final TextEditingController capitalController = TextEditingController();
 
@@ -61,12 +61,14 @@ class _PlayQuizState extends State<PlayQuiz> {
           ),
           width: 600,
           height: 700,
-          child: _buildQuestion(context, _countries, _countryIndex, capitalController, answerIcon, (answer) {
+          child: _buildQuestion(context, _countries, _countryIndex, capitalController, answerIcon, answerMessage, (answer) {
             setState(() {
-              if (_countries[_countryIndex].capitals.any((c) => c == answer)) {
+              if (_countries[_countryIndex].capitals.any((c) => c.toString().toLowerCase() == answer.toLowerCase())) {
                 answerIcon = Icons.check;
+                answerMessage = "";
               } else {
                 answerIcon = Icons.close;
+                answerMessage = "The capital of ${_countries[_countryIndex].name} is ${_countries[_countryIndex].capitals.first}";
               }
 
               _countryIndex++;
@@ -84,6 +86,7 @@ Widget _buildQuestion(
   int countryIndex, 
   TextEditingController controller,
   IconData answerIcon,
+  String answerMessage,
   Function(String) onNextCountry, 
   ) {
   return Padding(
@@ -119,6 +122,13 @@ Widget _buildQuestion(
                   ),
                 ),
               ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 4, top: 8),
+              child: Text(answerMessage, style: defaultPlainTextDark.copyWith(
+                color: answerIcon == Icons.check 
+                  ? Colors.green : answerIcon == Icons.close 
+                  ? Colors.red : Colors.grey,)),
             ),
           ],
         ),
