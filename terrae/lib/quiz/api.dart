@@ -8,7 +8,7 @@ class QuizApi {
   Future<List<Country>> getCountries() async {
     try {
       http.Response response = await http.get(
-        Uri.parse("https://restcountries.com/v3.1/all?fields=name,capital")
+        Uri.parse("https://restcountries.com/v3.1/all?fields=name,capital,unMember")
       );
 
       var json = jsonDecode(response.body);
@@ -16,18 +16,22 @@ class QuizApi {
 
       for (var countryInfo in json) {
         var name = countryInfo['name']['common'];
-        List<dynamic> capital = countryInfo['capital'];
+        List<dynamic> capitals = countryInfo['capital'];
+        bool isInUnitedNations = countryInfo['unMember'];
 
-        countries.add(
-          Country(
-            name: name,
-            capital: capital,
-          )
-        );
+        if (!isInUnitedNations) continue;
+
+        countries.add(Country(
+          name: name,
+          capitals: capitals,
+        ));
       }
 
+      return countries;
+
     } catch (exception) {
-      print(exception);
+      //print(exception);
+      return [];
     }
   }
 

@@ -1,9 +1,9 @@
 class Country {
   String name;
-  List<dynamic> capital;
+  List<dynamic> capitals;
 
   Country({
     required this.name,
-    required this.capital
+    required this.capitals
   });
 }

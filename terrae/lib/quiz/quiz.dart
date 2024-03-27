@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:terrae/quiz/api.dart';
+import 'package:terrae/quiz/country.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -9,12 +10,17 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  QuizApi _api = QuizApi();
+  final QuizApi _api = QuizApi();
 
   @override
   void initState() {
     super.initState();
-    _api.getCountries();
+
+    fetchCountries();
+  }
+
+  void fetchCountries() async {
+    List<Country> countries = await _api.getCountries();
   }
 
   @override
