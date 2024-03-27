@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:terrae/globals.dart';
 
 class TerraeTextField extends StatefulWidget {
-  const TerraeTextField({super.key, required this.hintText, required this.controller});
+  const TerraeTextField({super.key, required this.hintText, required this.controller, required this.onSubmitted});
 
   final String hintText;
   final TextEditingController controller;
+  final VoidCallback onSubmitted;
   
   @override
   State<TerraeTextField> createState() => _TerraeTextFieldState();
 }
 
 class _TerraeTextFieldState extends State<TerraeTextField> {
+  late FocusNode _focusNode;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,6 +37,7 @@ class _TerraeTextFieldState extends State<TerraeTextField> {
           child: TextField(
             controller: widget.controller,
             textAlignVertical: TextAlignVertical.center,
+            onSubmitted: (_) => widget.onSubmitted(),
             decoration: InputDecoration(
               hintText: widget.hintText,
               border: InputBorder.none,

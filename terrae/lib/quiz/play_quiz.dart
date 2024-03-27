@@ -22,8 +22,8 @@ class _PlayQuizState extends State<PlayQuiz> {
   bool _dataLoaded = false;
   int _countryIndex = 0;
 
-  int correct = 0;
-  int incorrect = 0;
+  IconData answerIcon = Icons.question_mark;
+
 
   final TextEditingController capitalController = TextEditingController();
 
@@ -61,15 +61,16 @@ class _PlayQuizState extends State<PlayQuiz> {
           ),
           width: 600,
           height: 700,
-          child: _buildQuestion(context, _countries, _countryIndex, capitalController, (answer) {
+          child: _buildQuestion(context, _countries, _countryIndex, capitalController, answerIcon, (answer) {
             setState(() {
               if (_countries[_countryIndex].capitals.any((c) => c == answer)) {
-                correct++;
+                answerIcon = Icons.check;
               } else {
-                incorrect++;
+                answerIcon = Icons.close;
               }
 
               _countryIndex++;
+              capitalController.text = "";
             });
           }),
         ),
@@ -82,6 +83,7 @@ Widget _buildQuestion(
   List<Country> countries, 
   int countryIndex, 
   TextEditingController controller,
+  IconData answerIcon,
   Function(String) onNextCountry, 
   ) {
   return Padding(
@@ -97,12 +99,27 @@ Widget _buildQuestion(
             Text("What is the capital of", style: defaultPlainTextLight),
             Text(countries[countryIndex].name, style: defaultTitleText),
             const SizedBox(height: 40),
-            TerraeTextField(
-              hintText: "capital...",
-              controller: controller,
+            Row(
+              children: [
+                TerraeTextField(
+                  hintText: "capital...",
+                  controller: controller,
+                  onSubmitted: () {
+                    onNextCountry(controller.text);
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Icon(
+                    answerIcon,
+                    color: answerIcon == Icons.check 
+                      ? Colors.green : answerIcon == Icons.close 
+                      ? Colors.red : Colors.grey,
+                    size: 18,
+                  ),
+                ),
+              ],
             ),
-            Text(""),
-            Text("")
           ],
         ),
         const Spacer(),
