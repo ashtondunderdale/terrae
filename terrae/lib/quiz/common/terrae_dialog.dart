@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:terrae/globals.dart';
 
 class TerraeDialog extends StatelessWidget {
-  const TerraeDialog({super.key, required this.correctAnswers, required this.secondsPassed});
+  const TerraeDialog({super.key, required this.correctAnswers, required this.secondsPassed, required this.countryCount});
 
   final int correctAnswers;
   final int secondsPassed;
+  final int countryCount;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class TerraeDialog extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  "$correctAnswers / 193",
+                  "$correctAnswers / $countryCount",
                   style: defaultTitleText,
                 ),
                 Text(

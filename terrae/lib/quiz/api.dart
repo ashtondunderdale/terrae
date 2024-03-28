@@ -17,11 +17,13 @@ class CountryApi {
       List<Country> countries = [];
 
       for (var countryInfo in json) {
-        var name = countryInfo['name']['common'];
+        String name = countryInfo['name']['common'];
         List<dynamic> capitals = countryInfo['capital'];
         List<dynamic> continents = countryInfo['continents'];
 
         if (!countryInfo['unMember']) continue;
+
+        capitals.first = capitals.first.toString().replaceAll(RegExp(r"[.,']"), '');
 
         if (category == 'WORLD') {
           countries.add(Country(

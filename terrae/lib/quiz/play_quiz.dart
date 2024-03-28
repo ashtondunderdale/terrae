@@ -114,7 +114,7 @@ class _PlayQuizState extends State<PlayQuiz> {
                       showDialog(
                         context: context, 
                         builder: (BuildContext context) {
-                          return TerraeDialog(correctAnswers: correctAnswers, secondsPassed: _secondsPassed);
+                          return TerraeDialog(correctAnswers: correctAnswers, secondsPassed: _secondsPassed, countryCount: _countries.length);
                         },
                       );
                     }
