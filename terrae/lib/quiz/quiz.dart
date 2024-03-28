@@ -14,8 +14,8 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  String gameMode = "";
-  String category = "";
+  String gamemode = "PRACTICE";
+  String category = "WORLD";
   
   @override
   Widget build(BuildContext context) {
@@ -29,25 +29,25 @@ class _QuizState extends State<Quiz> {
               text: "PLAY", 
               icon: Icons.play_arrow, 
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayQuiz(gameMode: gameMode, category: category)));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayQuiz(gamemode: gamemode, category: category)));
               },
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 24),
             child: TerraeDropdown(
-              initialText: "GAMEMODE",
+              initialText: "PRACTICE",
               items: const ["TIMED", "PRACTICE"], 
               onSelected: (item) {
-                gameMode = item;
+                gamemode = item;
               }
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 24),
             child: TerraeDropdown(
-              initialText: "CATEGORY",
-              items: const ["WORLD", "ASIA", "AUSTRAILIA", "EUROPE", "NORTH AMERICA", "SOUTH AMERICA", "AFRICA"], 
+              initialText: "WORLD",
+              items: const ["WORLD", "AFRICA", "ASIA", "AUSTRAILIA", "EUROPE", "NORTH AMERICA", "SOUTH AMERICA"], 
               onSelected: (item) {
                 category = item;
               }
