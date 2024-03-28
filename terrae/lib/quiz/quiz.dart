@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:terrae/quiz/api.dart';
 import 'package:terrae/quiz/common/terrae_button.dart';
 import 'package:terrae/quiz/common/terrae_dropdown.dart';
 import 'package:terrae/quiz/country.dart';
@@ -8,7 +7,7 @@ import 'package:terrae/quiz/play_quiz.dart';
 class Quiz extends StatefulWidget {
   Quiz({super.key});
 
-  List<Country> countries = [];
+  final List<Country> countries = [];
 
   @override
   State<Quiz> createState() => _QuizState();
@@ -16,6 +15,7 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   String gameMode = "";
+  String category = "";
   
   @override
   Widget build(BuildContext context) {
@@ -29,19 +29,30 @@ class _QuizState extends State<Quiz> {
               text: "PLAY", 
               icon: Icons.play_arrow, 
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayQuiz(gameMode: gameMode)));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayQuiz(gameMode: gameMode, category: category)));
               },
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 24),
             child: TerraeDropdown(
-              items: const ["RANDOM", "TIMED", "PRACTICE"], 
+              initialText: "GAMEMODE",
+              items: const ["TIMED", "PRACTICE"], 
               onSelected: (item) {
                 gameMode = item;
               }
             ),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 24),
+            child: TerraeDropdown(
+              initialText: "CATEGORY",
+              items: const ["WORLD", "ASIA", "AUSTRAILIA", "EUROPE", "NORTH AMERICA", "SOUTH AMERICA", "AFRICA"], 
+              onSelected: (item) {
+                category = item;
+              }
+            ),
+          ),
         ],
       ),
     );

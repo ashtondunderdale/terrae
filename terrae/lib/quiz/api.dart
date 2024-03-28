@@ -5,7 +5,7 @@ import 'package:terrae/quiz/country.dart';
 
 class CountryApi {
 
-  Future<List<Country>> getCountries() async {
+  Future<List<Country>> getCountries(String? continent) async {
     try {
       http.Response response = await http.get(
         Uri.parse("https://restcountries.com/v3.1/all?fields=name,capital,unMember")

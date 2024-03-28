@@ -10,9 +10,10 @@ import 'api.dart';
 import 'country.dart';
 
 class PlayQuiz extends StatefulWidget {
-  const PlayQuiz({super.key, required this.gameMode});
+  const PlayQuiz({super.key, required this.gameMode, required this.category});
 
   final String gameMode;
+  final String category;
 
   @override
   State<PlayQuiz> createState() => _PlayQuizState();
@@ -44,7 +45,9 @@ class _PlayQuizState extends State<PlayQuiz> {
   }
 
   void fetchCountries() async {
-    _countries = await _api.getCountries();
+    _countries = await _api.getCountries(widget.gameMode);
+    _countries.shuffle();
+
     setState(() {
       _dataLoaded = true;
     });

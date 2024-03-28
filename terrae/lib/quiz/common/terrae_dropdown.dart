@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import '../../globals.dart';
 
 class TerraeDropdown extends StatefulWidget {
-  const TerraeDropdown({super.key, required this.items, required this.onSelected});
+  const TerraeDropdown({super.key, required this.items, required this.onSelected, required this.initialText});
 
   final List<String> items;
   final Function(String) onSelected;
+  final String initialText;
 
   @override
   State<TerraeDropdown> createState() => _TerraeDropdownState();
@@ -26,7 +27,7 @@ class _TerraeDropdownState extends State<TerraeDropdown> {
       child: DropdownButton<String>(
         hint: Padding(
           padding: const EdgeInsets.all(8),
-          child: Text("GAME MODE", style: defaultPlainTextDark),
+          child: Text(widget.initialText, style: defaultPlainTextDark),
         ),
         underline: const SizedBox() ,
         dropdownColor: Colors.white,
