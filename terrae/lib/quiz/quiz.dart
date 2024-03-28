@@ -47,7 +47,7 @@ class _QuizState extends State<Quiz> {
             padding: const EdgeInsets.only(left: 24),
             child: TerraeDropdown(
               initialText: "WORLD",
-              items: const ["WORLD", "AFRICA", "ASIA", "AUSTRAILIA", "EUROPE", "NORTH AMERICA", "SOUTH AMERICA"], 
+              items: const ["WORLD", "AFRICA", "ASIA", "OCEANIA", "EUROPE", "NORTH AMERICA", "SOUTH AMERICA"], 
               onSelected: (item) {
                 category = item;
               }
