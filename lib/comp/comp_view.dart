@@ -9,43 +9,102 @@ class CompView extends StatefulWidget {
 }
 
 class _CompViewState extends State<CompView> {
-  final vm = VM(); // Assuming this initializes the VM and its memory
+  final codeController = TextEditingController();
+  final vm = VM();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 300, height: 400,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 240, 240, 240),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: _buildInput(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 600, height: 400,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 240, 240, 240),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: _buildMemory(),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 916, height: 120,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 240, 240, 240),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Widget _buildInput() {
+    return Column(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: TextField(
+                controller: codeController,
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: EdgeInsets.all(10.0),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 300,
-                height: 500,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 240, 240, 240),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 600,
-                height: 500,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 240, 240, 240),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: _buildMemory(),
-              ),
-            ),
+            _button("Execute", () {
+              setState(() {
+                vm.run(codeController.text);
+              });
+            }),
           ],
         ),
-      ),
+      ],
     );
   }
 
@@ -63,7 +122,7 @@ class _CompViewState extends State<CompView> {
           return Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(color: Colors.black26),
+              border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Center(
@@ -77,6 +136,34 @@ class _CompViewState extends State<CompView> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _button(String text, Function onClick) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => onClick(),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: 80, height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: Colors.grey)
+            ),
+            child: Center(
+              child: Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 12
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
