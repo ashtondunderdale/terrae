@@ -34,12 +34,9 @@ class VM {
       if (line.isEmpty) continue;
 
       var parts = line.split(" ");
-
       var command = parts[0];
+
       List<String> args = [];
-
-      if (parts.length > 3) throw "arguments exceeded";
-
       if (parts.length > 1) args.add(parts[1]);
       if (parts.length > 2) args.add(parts[2]);
 
@@ -65,4 +62,8 @@ class VM {
 
   }
   
+  void reset() {
+    ip = 0;
+    memory = List.filled(256, 0);
+  }
 }

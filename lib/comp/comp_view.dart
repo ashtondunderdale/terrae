@@ -97,9 +97,14 @@ class _CompViewState extends State<CompView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            _button("Execute", () {
+            _button("execute", () {
               setState(() {
                 vm.run(codeController.text);
+              });
+            }),
+            _button("reset", () {
+              setState(() {
+                vm.reset();
               });
             }),
           ],
