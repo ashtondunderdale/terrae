@@ -54,13 +54,13 @@ class _CompViewState extends State<CompView> {
                 color: const Color.fromARGB(255, 240, 240, 240),
                 borderRadius: BorderRadius.circular(4),
               ),
+              child: _buildOutput(),
             ),
           ),
         ],
       ),
     );
   }
-
 
   Widget _buildInput() {
     return Column(
@@ -127,7 +127,7 @@ class _CompViewState extends State<CompView> {
           return Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(color: Colors.black),
+              border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Center(
@@ -141,6 +141,30 @@ class _CompViewState extends State<CompView> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildOutput() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: Colors.grey)
+        ),
+        child: ListView.builder(
+          itemCount: vm.out.length,
+          itemBuilder: (context, idx) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                vm.out[idx]
+              ),
+            ); 
+          }
+        ),
       ),
     );
   }
