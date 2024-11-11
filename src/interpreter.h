@@ -4,10 +4,18 @@ typedef enum {
     TokenStar,
     TokenSlash,
     TokenModulo,
-
+    TokenLParen,
+    TokenRParen,
+    TokenLBrace,
+    TokenRBrace,
+    TokenDot,
+    TokenExclamation,
+    TokenNotEquals,
+    TokenSingleEquals,
+    TokenDoubleEquals,
     TokenNewLine,
     TokenWhiteSpace,
-
+    
     TokenIf,
     TokenWhile,
     TokenFor,
@@ -40,9 +48,7 @@ typedef enum {
     LexerDefectInvalidToken,
 } LexerDefect;
 
-
 extern Token* tokenize(char *buff);
-
 
 // struct ReservedWord {
 //     TokenType type;
