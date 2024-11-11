@@ -20,8 +20,9 @@ int main() {
         return 1;
     }
 
-    fread(buff, 1, sz, fptr);
-    buff[sz] = '\0';
+    size_t read_size = fread(buff, 1, sz, fptr);
+    buff[read_size] = '\0';
+    fclose(fptr);
 
     Token* tokens = tokenize(buff);
 

@@ -5,6 +5,9 @@ typedef enum {
     TokenSlash,
     TokenModulo,
 
+    TokenNewLine,
+    TokenWhiteSpace,
+
     TokenIf,
     TokenWhile,
     TokenFor,
@@ -24,17 +27,19 @@ typedef struct {
     long capacity;
 } TokenList;
 
-typedef enum {
-    LexerDefectNone,
-    LexerDefectInvalidToken,
-} LexerDefect;
-
 typedef struct {
     char *source;
     TokenList tokenList;
     int current_idx;
     int current_line;
+    int defect_flag;
 } LexerState;
+
+typedef enum {
+    LexerDefectNone,
+    LexerDefectInvalidToken,
+} LexerDefect;
+
 
 extern Token* tokenize(char *buff);
 
