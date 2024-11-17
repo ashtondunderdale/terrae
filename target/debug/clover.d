@@ -1,1 +1,1 @@
-C:\Users\rxgqq\projects\clover\target\debug\clover.exe: C:\Users\rxgqq\projects\clover\src\lexer.rs C:\Users\rxgqq\projects\clover\src\main.rs C:\Users\rxgqq\projects\clover\src\parser.rs C:\Users\rxgqq\projects\clover\src\token.rs
+C:\Users\rxgqq\stuff\projects\clover\target\debug\clover.exe: C:\Users\rxgqq\stuff\projects\clover\src\ast.rs C:\Users\rxgqq\stuff\projects\clover\src\lexer.rs C:\Users\rxgqq\stuff\projects\clover\src\main.rs C:\Users\rxgqq\stuff\projects\clover\src\parser.rs C:\Users\rxgqq\stuff\projects\clover\src\token.rs

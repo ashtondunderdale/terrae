@@ -1,6 +1,5 @@
 
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum Symbol {
     Plus,
     Minus,
@@ -58,21 +57,19 @@ pub enum Symbol {
 //     Char(char),
 // }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Token {
-    symbol: Symbol,
-    lexeme: String,
-    //literal: Option<Literal>,
+    pub symbol: Symbol,
+    pub lexeme: String,
     line: usize,
     column: usize
 }
 
 impl Token {
-    pub fn new(symbol: Symbol, lexeme: String, /*literal: Option<Literal>,*/ line: usize, column: usize) -> Self {
+    pub fn new(symbol: Symbol, lexeme: String, line: usize, column: usize) -> Self {
         Self {
             symbol,
             lexeme,
-            //literal,
             line,
             column
         }
