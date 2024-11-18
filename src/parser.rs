@@ -1,7 +1,6 @@
 use core::panic;
-use std::arch::x86_64;
 
-use crate::{ast::{Ast, AstNode, BinaryExpression, BooleanLiteral, FloatLiteral, IntegerLiteral, StringLiteral}, token::{Symbol, Token}};
+use crate::{ast::{Ast, AstNode, BinaryExpression, BooleanLiteral, FloatLiteral, Identifier, IntegerLiteral, StringLiteral}, token::{Symbol, Token}};
 
 pub struct Parser {
     ast: Ast,
@@ -24,7 +23,7 @@ impl Parser {
 
     pub fn parse_ast(&mut self) {
         while self.position < self.tokens.len() {
-            if let Some(expr) = self.parse_binary() {
+            if let Some(expr) = self.parse_expression() {
                 self.ast.body.push(expr);
             } 
             else {
@@ -37,9 +36,12 @@ impl Parser {
         self.print();
     }
 
-    fn parse_binary(&mut self) -> Option<AstNode> {
-        let mut left = self.parse_primary();
-        self.position += 1;
+    fn parse_expression(&mut self) -> Option<AstNode> {
+        return self.parse_term();
+    }
+
+    fn parse_term(&mut self) -> Option<AstNode> {
+        let mut left = self.parse_factor();
 
         while let Some(token) = self.current_token() {
             match token.symbol {
@@ -47,9 +49,7 @@ impl Parser {
                     let operator = token.clone();
                     self.position += 1;
 
-                    if let Some(right) = self.parse_primary() {
-                        self.position += 1;
-                        
+                    if let Some(right) = self.parse_factor() {
                         left = Some(AstNode::BinaryExpressionNode({
                             BinaryExpression {
                                 left: Box::new(left.unwrap()),
@@ -59,9 +59,33 @@ impl Parser {
                         }))
                     }
                 }
-                _ => {
-                    break;
+                _ => break
+            }
+        }
+
+        return left
+    }
+
+    fn parse_factor(&mut self) -> Option<AstNode> {
+        let mut left = self.parse_primary();
+
+        while let Some(token) = self.current_token() {
+            match token.symbol {
+                Symbol::Star | Symbol::Slash | Symbol::Modulo => {
+                    let operator = token.clone();
+                    self.position += 1;
+
+                    if let Some(right) = self.parse_factor() {
+                        left = Some(AstNode::BinaryExpressionNode({
+                            BinaryExpression {
+                                left: Box::new(left.unwrap()),
+                                operator,
+                                right: Box::new(right)
+                            }
+                        }))
+                    }
                 }
+                _ => break
             }
         }
 
@@ -69,42 +93,48 @@ impl Parser {
     }
 
     fn parse_primary(&mut self) -> Option<AstNode> {
-        match self.current_token() {
-            Some(token) => {
-                match token.symbol {
-                    Symbol::String => {
-                        Some(AstNode::StringLiteralExpression(StringLiteral { 
-                            value: token.lexeme.to_string() 
-                        }))
-                    },
-                    Symbol::Integer => {
-                        Some(AstNode::IntegerLiteralExpression(IntegerLiteral { 
-                            value: str::parse(&token.lexeme).expect("") 
-                        }))
-                    },
-                    Symbol::Float => {
-                        Some(AstNode::FloatLiteralExpression(FloatLiteral { 
-                            value: str::parse(&token.lexeme).expect("") 
-                        }))
-                    },
-                    Symbol::False | Symbol::True => {
-                        Some(AstNode::BooleanLiteralExpression(BooleanLiteral { 
-                            value: if token.lexeme == "true" { true } else { false }
-                        }))
-                    },
-                    _ => {
-                        panic!("Error parsing {} as primary expression", token.lexeme)
-                    }
+        if let Some(token) = self.current_token().cloned() {
+            self.position += 1;
+    
+            match token.symbol {
+                Symbol::String => {
+                    Some(AstNode::StringLiteralExpression(StringLiteral {
+                        value: token.lexeme.to_string()
+                    }))
+                },
+                Symbol::Integer => {
+                    Some(AstNode::IntegerLiteralExpression(IntegerLiteral {
+                        value: str::parse(&token.lexeme).expect("Invalid integer format")
+                    }))
+                },
+                Symbol::Float => {
+                    Some(AstNode::FloatLiteralExpression(FloatLiteral {
+                        value: str::parse(&token.lexeme).expect("Invalid float format")
+                    }))
+                },
+                Symbol::False | Symbol::True => {
+                    Some(AstNode::BooleanLiteralExpression(BooleanLiteral {
+                        value: token.lexeme == "true" 
+                    }))
+                },
+                Symbol::Identifier => {
+                    Some(AstNode::IdentifierExpression(Identifier {
+                        value: token.lexeme
+                    }))
+                },
+                _ => {
+                    panic!("Error parsing {} as primary expression", token.lexeme)
                 }
-
             }
-            None => None
+        } else {
+            None
         }
     }
+    
 
     fn print(&self) {
         for expr in &self.ast.body {
-            println!("{:?}", expr)
+            println!("{:?}", expr.to_string())
         }
     }
 }
